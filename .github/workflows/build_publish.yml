@@ -1,0 +1,81 @@
+name: npm Build, Publish
+  
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        description: Optionally pass the Node version. default value is 12.x
+        required: false
+        type: string
+        default: 12.x
+      
+      build-cmd:
+        description: Optionally pass npm build command. default value is 'npm run build'
+        required: false
+        type: string
+        default: npm run build
+
+      publish-cmd:
+        description: Optionally pass npm publish command. default value is 'npm publish ./dist/'
+        required: false
+        type: string
+        default: npm publish ./dist/
+
+jobs:
+# npm build and publish the project
+  build-publish:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+    
+    - name: Set up Node ${{ inputs.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ inputs.node-version }}
+        registry-url: 'https://npm.pkg.github.com'
+        cache: npm
+
+    - name: Get Project Version from package.json
+      run: |
+        projectVersion=$(cat package.json | grep -o '"version": *"[^"]*' | awk -F'"' '{ print $4 }')
+        echo "PROJECT_VERSION=$projectVersion" >> $GITHUB_ENV
+      
+    - name: Construct the final build version
+      run: |
+        echo "The Project Version from package.json is ${{env.PROJECT_VERSION}}"
+        echo "The build number is ${{github.run_number}}"
+        buildVersion=${{env.PROJECT_VERSION}}-${{github.run_number}}
+        echo "BUILD_VERSION=$buildVersion" >> $GITHUB_ENV
+
+    - name: Bump version
+      run: npm --git-tag-version=false version ${{env.BUILD_VERSION}}
+
+    # Initializes the CodeQL tools for scanning.
+    # - name: Initialize CodeQL
+    #   uses: github/codeql-action/init@v2
+    #   with:
+    #     languages: javascript
+    #     queries: security-extended,security-and-quality
+    
+    - name: Build with npm
+      run: npm install
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.DEPLOY_GITHUB_TOKEN }}
+      
+    - name: Build Library
+      run: ${{ inputs.build-cmd }}
+
+    # - name: Perform CodeQL Analysis
+    #   uses: github/codeql-action/analyze@v2
+
+    - name: Publish to npm
+      run: ${{ inputs.publish-cmd }}
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.DEPLOY_GITHUB_TOKEN }}
+        
+    - name: Create Tag
+      uses: rickstaa/action-create-tag@v1.6.1
+      with:
+        tag: ${{env.BUILD_VERSION}}
