@@ -1,19 +1,4 @@
 name: "npm Build"
-  
-on:
-  workflow_call:
-    inputs:
-      node-version:
-        description: Optionally pass the Node version. default value is 12.x
-        required: false
-        type: string
-        default: 12.x
-      
-      build-cmd:
-        description: Optionally pass npm build command. default value is 'npm run build'
-        required: false
-        type: string
-        default: npm run build
 
 jobs:
 # npm build  the project
