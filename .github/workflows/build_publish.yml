@@ -1,4 +1,4 @@
-name: npm Build, Publish
+name: "npm Build, Publish"
   
 on:
   workflow_call:
