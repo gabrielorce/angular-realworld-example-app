@@ -56,7 +56,10 @@ jobs:
     #     queries: security-extended,security-and-quality
 
     - name: update npm
-      run: npm install -g @angular/cli@11.2.2 npm@latest
+      run: |
+          nvm install 10
+          npm cache clean --force
+          npm install node@20.5.0 -g
 
     - name: Build with npm
       run: npm install
