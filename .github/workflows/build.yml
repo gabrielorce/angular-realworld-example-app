@@ -8,7 +8,7 @@ on:
         description: Optionally pass the Node version. default value is 12.x
         required: false
         type: string
-        default: 12.x
+        default: 20.5.0
       
       build-cmd:
         description: Optionally pass npm build command. default value is 'npm run build'
@@ -55,11 +55,6 @@ jobs:
     #     languages: javascript
     #     queries: security-extended,security-and-quality
 
-    - name: update npm
-      run: |
-          nvm install 10
-          npm cache clean --force
-          npm install node@20.5.0 -g
 
     - name: Build with npm
       run: npm install
