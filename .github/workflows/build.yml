@@ -54,7 +54,10 @@ jobs:
     #   with:
     #     languages: javascript
     #     queries: security-extended,security-and-quality
-    
+
+    - name: update npm
+      run: npm install -g @angular/cli@11.2.2 npm@latest
+
     - name: Build with npm
       run: npm install
       env:
