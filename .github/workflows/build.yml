@@ -66,3 +66,9 @@ jobs:
 
     # - name: Perform CodeQL Analysis
     #   uses: github/codeql-action/analyze@v2
+
+    - name: SonarQube Scan
+      uses: sonarsource/sonarqube-scan-action@master
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
