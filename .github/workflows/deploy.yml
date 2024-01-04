@@ -43,8 +43,8 @@ jobs:
     - name: Build Library
       run: ${{ inputs.build-cmd }}
 
-    - name: Build Library
-      run: ls -al
+    - name: list dirs
+      run: ls -al ./dist 
 
 
     - name: Deploy
