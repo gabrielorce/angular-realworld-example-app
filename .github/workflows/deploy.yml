@@ -46,3 +46,7 @@ jobs:
     - name: Deploy
       if: success()
       run: aws s3 sync ./dist/angular-conduit s3://${{ secrets.AWS_S3_BUCKET }}
+
+    - name: Cloudfront Invalidation
+      if: success()
+      run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
