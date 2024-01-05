@@ -43,10 +43,6 @@ jobs:
     - name: Build Library
       run: ${{ inputs.build-cmd }}
 
-    - name: list dirs
-      run: ls -al ./dist 
-
-
     - name: Deploy
       if: success()
-      run: aws s3 sync ./dist/angular-conduit s3://z-angular-app
+      run: aws s3 sync ./dist/angular-conduit s3://${{ secrets.AWS_S3_BUCKET }}
