@@ -50,7 +50,6 @@ jobs:
         ls -al
         mv assets/appConfig.json assets/appConfig_OLD.json
         mv assets/appConfigPROD.json assets/appConfig.json
-        |
 
     - name: Deploy
       if: success()
