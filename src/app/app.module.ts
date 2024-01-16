@@ -1,5 +1,5 @@
 import { APP_INITIALIZER, NgModule } from "@angular/core";
-import { AppConfigService } from "./service/AppConfigService";
+import { AppConfigService } from "./AppConfigService";
 
 import { BrowserModule } from "@angular/platform-browser";
 

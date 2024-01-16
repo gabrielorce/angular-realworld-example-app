@@ -16,11 +16,16 @@ export class AppConfigService {
     textkey: "testDEVPROD",
   };
 
-  constructor(private http: HttpClient) {}
+  private httpClient: HttpClient;
+  constructor(private handler: HttpBackend) {
+    this.httpClient = new HttpClient(handler);
+  }
 
   //This function will get the current config for the environment
   setConfig(): Promise<void | AppConfig> {
-    return firstValueFrom(this.http.get<AppConfig>("../assets/appConfig.json"))
+    return firstValueFrom(
+      this.httpClient.get<AppConfig>("/assets/appConfig.json"),
+    )
       .then((config: AppConfig) => (this.configuration = config))
       .catch((error) => {
         console.error(error);

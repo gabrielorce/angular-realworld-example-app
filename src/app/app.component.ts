@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { AppConfig, AppConfigService } from "./service/AppConfigService";
+import { AppConfig, AppConfigService } from "./AppConfigService";
 
 @Component({
   selector: "app-root",
