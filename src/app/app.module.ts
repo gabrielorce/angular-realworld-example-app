@@ -1,4 +1,6 @@
 import { APP_INITIALIZER, NgModule } from "@angular/core";
+import { AppConfigService } from "./service/AppConfigService";
+
 import { BrowserModule } from "@angular/platform-browser";
 
 import { AppComponent } from "./app.component";
@@ -17,6 +19,10 @@ export function initAuth(jwtService: JwtService, userService: UserService) {
   return () => (jwtService.getToken() ? userService.getCurrentUser() : EMPTY);
 }
 
+export function initConfig(appConfig: AppConfigService) {
+  return () => appConfig.setConfig();
+}
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -31,6 +37,12 @@ export function initAuth(jwtService: JwtService, userService: UserService) {
       provide: APP_INITIALIZER,
       useFactory: initAuth,
       deps: [JwtService, UserService],
+      multi: true,
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initConfig,
+      deps: [AppConfigService],
       multi: true,
     },
     { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true },
