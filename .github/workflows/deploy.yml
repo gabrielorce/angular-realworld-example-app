@@ -43,6 +43,15 @@ jobs:
     - name: Build Library
       run: ${{ inputs.build-cmd }}
 
+    - name: Rename
+      if: success()
+      run: |
+        cd dist
+        ls -al
+        mv dist/assets/appConfig.json dist/assets/appConfig_OLD.json
+        mv dist/assets/appConfigPROD.json dist/assets/appConfig.json
+        |
+
     - name: Deploy
       if: success()
       run: aws s3 sync ./dist/angular-conduit s3://${{ secrets.AWS_S3_BUCKET }}
