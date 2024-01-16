@@ -46,7 +46,7 @@ jobs:
     - name: Rename
       if: success()
       run: |
-        cd dist
+        cd dist/angular-conduit
         ls -al
         mv dist/assets/appConfig.json dist/assets/appConfig_OLD.json
         mv dist/assets/appConfigPROD.json dist/assets/appConfig.json
