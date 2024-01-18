@@ -3,7 +3,22 @@ name: Deploy
 on:
   workflow_dispatch:
     inputs:
-      target-env:
+      DEVELOPMENT:
+        description: 'Deploy to DEVELOPMENT'
+        type: boolean
+        default: true
+        required: false
+      STAGING:
+          description: 'Deploy to STAGING'
+          type: boolean
+          default: true
+          required: false
+      PRODUCTION:
+        description: 'Deploy to PRODUCTION'
+        type: boolean
+        default: true
+        required: false
+      environments:
         required: true
         description: 'Environment to run tests against'
         type: environment
