@@ -13,6 +13,11 @@ on:
           type: boolean
           default: true
           required: false
+      QA:
+          description: 'Deploy to QA'
+          type: boolean
+          default: true
+          required: false
       PRODUCTION:
         description: 'Deploy to PRODUCTION'
         type: boolean
