@@ -5,7 +5,8 @@ on:
     inputs:
       target-env:
         required: true
-        type: string
+        description: 'Environment to run tests against'
+        type: environment
       node-version:
         description: Optionally pass the Node version. default value is 12.x
         required: false
@@ -17,10 +18,7 @@ on:
         required: false
         type: string
         default: npm run build
-      environment:
-        description: 'Environment to run tests against'
-        type: environment
-        required: true
+
 
 
 jobs:
