@@ -18,10 +18,7 @@ on:
         type: boolean
         default: true
         required: false
-      environments:
-        required: true
-        description: 'Environment to run tests against'
-        type: environment
+
       node-version:
         description: Optionally pass the Node version. default value is 12.x
         required: false
@@ -38,7 +35,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to ${ { inputs.target-env } }
+    name: Deploy to selected environments
     runs-on: ubuntu-latest
     steps:
     - name: Configure AWS Credentials
@@ -48,6 +45,14 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
         aws-s3-bucket-url:  ${{ secrets.AWS_S3_BUCKET_URL }}
         aws-region: us-east-1
+
+   
+    - name: Check Deploy to Development
+      if: ${{ inputs.DEVELOPMENT}}
+      run: echo "Deploying to DEVELOPMENT"
+    - name: Check Deploy to Production
+      if: ${{ inputs.DEVELOPMENT}}
+      run: echo "Deploying to PRODUCTION"
 
     - name: Checkout
       uses: actions/checkout@v2
