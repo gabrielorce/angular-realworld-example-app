@@ -88,6 +88,5 @@ jobs:
       - run: npm ci
       - run: npm publish
       - run: git push --tags && git push
-      - run: yarn publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
