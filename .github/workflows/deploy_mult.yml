@@ -60,10 +60,10 @@ jobs:
       if: ${{ matrix.location == 'STAG' && inputs.STAGING}}
       run: echo "Deploying to STAGING"
     - name: Check Deploy to QA
-      if: ${{ matrix.location == "QA" && inputs.QualtityAssurance}}
+      if: ${{ matrix.location == 'QA' && inputs.QualtityAssurance}}
       run: echo "Deploying to QA"
     - name: Check Deploy to PROD
-      if: ${{ matrix.location == "PRODUCTION" && inputs.PRODUCTION}}
+      if: ${{ matrix.location == 'PROD' && inputs.PRODUCTION}}
       run: echo "Deploying to PRODUCTION"
 
     - name: Checkout
