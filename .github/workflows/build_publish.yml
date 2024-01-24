@@ -1,7 +1,7 @@
 name: "npm Build, Publish"
   
 on:
-  workflow_call:
+  workflow_dispatch:
     inputs:
       node-version:
         description: Optionally pass the Node version. default value is 12.x
