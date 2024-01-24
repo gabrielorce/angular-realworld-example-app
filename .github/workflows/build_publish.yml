@@ -60,7 +60,9 @@ jobs:
     #     queries: security-extended,security-and-quality
     
     - name: Build with npm
-      run: npm install
+      run: |
+         npm install
+         npm init
       env:
         NODE_AUTH_TOKEN: ${{ secrets.DEPLOY_GITHUB_TOKEN }}
       
