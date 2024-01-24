@@ -1,0 +1,97 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      DEVELOPMENT:
+        description: 'Deploy to DEVELOPMENT'
+        type: boolean
+        default: true
+        required: false
+      STAGING:
+        description: 'Deploy to STAGING'
+        type: boolean
+        default: true
+        required: false
+      QA:
+        description: 'Deploy to QA'
+        type: boolean
+        default: true
+        required: false
+      PRODUCTION:
+        description: 'Deploy to PRODUCTION'
+        type: boolean
+        default: true
+        required: false
+
+      node-version:
+        description: Optionally pass the Node version. default value is 12.x
+        required: false
+        type: string
+        default: 20.5.0
+      
+      build-cmd:
+        description: Optionally pass npm build command. default value is 'npm run build'
+        required: false
+        type: string
+        default: npm run build
+
+jobs:
+  deploy-matrix:
+    strategy:
+      fail-fast: false
+      matrix:
+        location: [DEVELOPMENT, STAGING, QA, PRODUCTION]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+        aws-s3-bucket-url:  ${{ secrets.AWS_S3_BUCKET_URL }}
+        aws-region: us-east-1
+
+   
+    - name: Check Deploy to DEVELOPMENT
+      if: ${{ matrix.location == DEVELOPMENT && inputs.DEVELOPMENT}}
+      run: echo "Deploying to DEVELOPMENT"
+    - name: Check Deploy to STAGING
+      if: ${{ matrix.location == STAGING && inputs.STAGING}}
+      run: echo "Deploying to STAGING"
+    - name: Check Deploy to QA
+      if: ${{ matrix.location == QA && inputs.QA}}
+      run: echo "Deploying to QA"
+    - name: Check Deploy to Production
+      if: ${{ matrix.location == PRODUCTION && inputs.PRODUCTION}}
+      run: echo "Deploying to PRODUCTION"
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build Library
+      run: ${{ inputs.build-cmd }}
+
+    - name: Rename
+      if: success()
+      run: |
+        cd dist/angular-conduit
+        ls -al
+        mv assets/appConfig.json assets/appConfig_OLD.json
+        mv assets/appConfigPROD.json assets/appConfig.json
+
+    - name: Deploy
+      if: success()
+      run: aws s3 sync ./dist/angular-conduit s3://${{ secrets.AWS_S3_BUCKET }}
+
+    - name: Cloudfront Invalidation
+      if: success()
+      run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
