@@ -57,12 +57,16 @@ jobs:
 
 
     - name: Build with npm
-      run: npm install
+      run: |
+         npm install
+         ls -al
       env:
         NODE_AUTH_TOKEN: ${{ secrets.DEPLOY_GITHUB_TOKEN }}
       
     - name: Build Library
-      run: ${{ inputs.build-cmd }}
+      run: |
+         ${{ inputs.build-cmd }}
+         ls -al
 
     # - name: Perform CodeQL Analysis
     #   uses: github/codeql-action/analyze@v2
