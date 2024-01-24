@@ -38,7 +38,7 @@ jobs:
         projectVersion=$(cat package.json | grep -o '"version": *"[^"]*' | awk -F'"' '{ print $4 }')
         projectName=$(cat package.json | grep -o '"name": *"[^"]*' | awk -F'"' '{ print $4 }')
         echo "PROJECT_VERSION=$projectVersion" >> $GITHUB_ENV
-        echo $projectName
+        echo "PROJECT_NAME=$projectName" >> $GITHUB_ENV
       
     - name: Construct the final build version
       run: |
@@ -60,7 +60,7 @@ jobs:
 
     - name: Build with npm
       run: |
-         npm install ./package.tgz
+         npm install ./${{env.PROJECT_NAME}}-${{env.BUILD_VERSION}}.tar
          ls -al
       env:
         NODE_AUTH_TOKEN: ${{ secrets.DEPLOY_GITHUB_TOKEN }}
