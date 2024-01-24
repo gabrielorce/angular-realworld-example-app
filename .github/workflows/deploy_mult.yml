@@ -13,7 +13,7 @@ on:
         type: boolean
         default: true
         required: false
-      QA:
+      QualtityAssurance:
         description: 'Deploy to QA'
         type: boolean
         default: true
@@ -41,7 +41,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        location: [DEVELOPMENT, STAGING, QA, PRODUCTION]
+        location: [DEV, STAG, QA, PROD]
     runs-on: ubuntu-latest
     steps:
     - name: Configure AWS Credentials
@@ -54,15 +54,15 @@ jobs:
 
    
     - name: Check Deploy to DEVELOPMENT
-      if: ${{ matrix.location == "DEVELOPMENT" && inputs.DEVELOPMENT}}
+      if: ${{ matrix.location == DEV && inputs.DEVELOPMENT}}
       run: echo "Deploying to DEVELOPMENT"
     - name: Check Deploy to STAGING
-      if: ${{ matrix.location == "STAGING" && inputs.STAGING}}
+      if: ${{ matrix.location == STAG && inputs.STAGING}}
       run: echo "Deploying to STAGING"
     - name: Check Deploy to QA
-      if: ${{ matrix.location == "QA" && inputs.QA}}
+      if: ${{ matrix.location == "QA" && inputs.QualtityAssurance}}
       run: echo "Deploying to QA"
-    - name: Check Deploy to Production
+    - name: Check Deploy to PROD
       if: ${{ matrix.location == "PRODUCTION" && inputs.PRODUCTION}}
       run: echo "Deploying to PRODUCTION"
 
