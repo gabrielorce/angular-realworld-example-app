@@ -54,10 +54,10 @@ jobs:
 
    
     - name: Check Deploy to DEVELOPMENT
-      if: ${{ matrix.location == DEV && inputs.DEVELOPMENT}}
+      if: ${{ matrix.location == "DEV" && inputs.DEVELOPMENT}}
       run: echo "Deploying to DEVELOPMENT"
     - name: Check Deploy to STAGING
-      if: ${{ matrix.location == STAG && inputs.STAGING}}
+      if: ${{ matrix.location == "STAG" && inputs.STAGING}}
       run: echo "Deploying to STAGING"
     - name: Check Deploy to QA
       if: ${{ matrix.location == "QA" && inputs.QualtityAssurance}}
