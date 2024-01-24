@@ -67,6 +67,12 @@ jobs:
     - name: Build Library
       run: ${{ inputs.build-cmd }}
 
+    - name: list dirs
+      run: | 
+         pwd
+         ls -al
+         ls ./dist
+
     # - name: Perform CodeQL Analysis
     #   uses: github/codeql-action/analyze@v2
 
