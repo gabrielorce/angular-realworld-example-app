@@ -90,9 +90,9 @@ jobs:
         mv assets/appConfigPROD.json assets/appConfig.json
 
     - name: Deploy
+      if: success()
       env:
-          if: success()
-          run: aws s3 sync ./dist/angular-conduit s3://${{ secrets.AWS_S3_BUCKET }}
+        run: aws s3 sync ./dist/angular-conduit s3://${{ secrets.AWS_S3_BUCKET }}
 
     - name: Cloudfront Invalidation
       if: success()
