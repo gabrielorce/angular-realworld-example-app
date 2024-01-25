@@ -42,11 +42,10 @@ jobs:
   deploy:
     name: Deploy to selected environments
     runs-on: ubuntu-latest
+    environment: PROD
     steps:
     - name: Check Deploy to Development
       if: ${{ inputs.DEVELOPMENT}}
-        env:
-          AWS_S3_BUCKET= ${{ secrets.AWS_S3_BUCKET_URL }}
       run: echo "Deploying to DEVELOPMENT"
       
     - name: Check Deploy to Production
