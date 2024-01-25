@@ -48,9 +48,11 @@ jobs:
            - PRODUCTION
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Check Deploy to DEVELOPMENT
         if: ${{ matrix.location == 'DEVELOPMENT' && inputs.DEVELOPMENT}}
         uses: ./.github/workflows/deploy_each.yml
         with:
            location: ${{ matrix.location }}
-      
+
