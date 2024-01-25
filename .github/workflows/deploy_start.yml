@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy Selected
 
 on:
   workflow_dispatch:
