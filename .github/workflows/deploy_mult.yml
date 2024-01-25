@@ -93,7 +93,7 @@ jobs:
       if: success()
       env: 
         AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-      run: aws s3 sync ./dist/angular-conduit s3://${{ AWS_S3_BUCKET }}
+      run: aws s3 sync ./dist/angular-conduit s3://${AWS_S3_BUCKET}
 
     - name: Cloudfront Invalidation
       if: success()
