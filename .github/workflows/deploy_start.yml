@@ -46,6 +46,7 @@ jobs:
            - STAGING
            - QA
            - PRODUCTION
+    runs-on: ubuntu-latest
     steps:
       - name: Check Deploy to DEVELOPMENT
         if: ${{ matrix.location == 'DEVELOPMENT' && inputs.DEVELOPMENT}}
