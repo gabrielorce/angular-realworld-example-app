@@ -67,13 +67,6 @@ jobs:
     - name: Build Library
       run: ${{ inputs.build-cmd }}
 
-
-    - name: move to dir
-      run: |
-         pwd
-         cd dist/angular-conduit
-         pwd
-         
     - name: Check Deploy to DEVELOPMENT
       if: ${{ matrix.location == 'DEV' && inputs.DEVELOPMENT}}
       run: | 
