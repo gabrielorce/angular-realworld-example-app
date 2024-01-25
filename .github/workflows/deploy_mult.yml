@@ -13,7 +13,7 @@ on:
         type: boolean
         default: true
         required: false
-      QualtityAssurance:
+      QA:
         description: 'Deploy to QA'
         type: boolean
         default: true
@@ -42,6 +42,7 @@ jobs:
       fail-fast: false
       matrix:
         location: [DEV, STAG, QA, PROD]
+    environment: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     steps:
     - name: Configure AWS Credentials
