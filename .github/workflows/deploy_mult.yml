@@ -42,7 +42,7 @@ jobs:
       fail-fast: false
       matrix:
         location: [DEV, STAG, QA, PROD]
-    environment: ${{ inputs.environment }}
+    environment: PRODUCTION
     runs-on: ubuntu-latest
     steps:
     - name: Configure AWS Credentials
