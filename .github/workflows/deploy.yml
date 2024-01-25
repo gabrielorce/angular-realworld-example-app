@@ -43,21 +43,26 @@ jobs:
     name: Deploy to selected environments
     runs-on: ubuntu-latest
     steps:
+    - name: Check Deploy to Development
+      if: ${{ inputs.DEVELOPMENT}}
+        env:
+          AWS_S3_BUCKET= ${{ secrets.AWS_S3_BUCKET_URL }}
+      run: echo "Deploying to DEVELOPMENT"
+      
+    - name: Check Deploy to Production
+      if: ${{ inputs.PROUCTION}}
+      run: echo "Deploying to PRODUCTION"
+      
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_KEY }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-        aws-s3-bucket-url:  ${{ secrets.AWS_S3_BUCKET_URL }}
+        aws-s3-bucket-url:  ${AWS_S3_BUCKET}
         aws-region: us-east-1
 
    
-    - name: Check Deploy to Development
-      if: ${{ inputs.DEVELOPMENT}}
-      run: echo "Deploying to DEVELOPMENT"
-    - name: Check Deploy to Production
-      if: ${{ inputs.DEVELOPMENT}}
-      run: echo "Deploying to PRODUCTION"
+
 
     - name: Checkout
       uses: actions/checkout@v2
