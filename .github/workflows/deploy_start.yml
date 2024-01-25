@@ -1,0 +1,56 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      DEVELOPMENT:
+        description: 'Deploy to DEVELOPMENT'
+        type: boolean
+        default: true
+        required: false
+      STAGING:
+          description: 'Deploy to STAGING'
+          type: boolean
+          default: true
+          required: false
+      QA:
+          description: 'Deploy to QA'
+          type: boolean
+          default: true
+          required: false
+      PRODUCTION:
+        description: 'Deploy to PRODUCTION'
+        type: boolean
+        default: true
+        required: false
+
+      node-version:
+        description: Optionally pass the Node version. default value is 12.x
+        required: false
+        type: string
+        default: 20.5.0
+      
+      build-cmd:
+        description: Optionally pass npm build command. default value is 'npm run build'
+        required: false
+        type: string
+        default: npm run build
+
+jobs:
+  deploy-matrix:
+    strategy:
+      fail-fast: false
+      matrix:
+        location: 
+           - DEVELOPMENT
+           - STAGING
+           - QA
+           - PRODUCTION
+        exclude:
+           - location: ${{ matrix.location == 'DEVELOPMENT' && !inputs.DEVELOPMENT}}
+           - location: ${{ matrix.location == 'STAGING' && !inputs.STAGING}}
+           - location: ${{ matrix.location == 'QA' && !inputs.QA}}
+           - location: ${{ matrix.location == 'PRODUCTION' && !inputs.PRODUCTION}}
+    uses: ./.github/workflows/deploy_each.yml
+    secrets: inherit # pass all secrets
+      
