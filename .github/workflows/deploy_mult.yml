@@ -69,8 +69,11 @@ jobs:
 
 
     - name: move to dir
-      run: cd dist/angular-conduit
-      
+      run: |
+         pwd
+         cd dist/angular-conduit
+         pwd
+         
     - name: Check Deploy to DEVELOPMENT
       if: ${{ matrix.location == 'DEV' && inputs.DEVELOPMENT}}
       run: | 
