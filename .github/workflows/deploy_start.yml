@@ -46,13 +46,11 @@ jobs:
            - STAGING
            - QA
            - PRODUCTION
-        exclude:
-           - location: ${{ matrix.location == 'DEVELOPMENT' && !inputs.DEVELOPMENT}}
-           - location: ${{ matrix.location == 'STAGING' && !inputs.STAGING}}
-           - location: ${{ matrix.location == 'QA' && !inputs.QA}}
-           - location: ${{ matrix.location == 'PRODUCTION' && !inputs.PRODUCTION}}
-    uses: ./.github/workflows/deploy_each.yml
-    with:
-      location: ${{ matrix.location }}
-    secrets: inherit # pass all secrets
+    steps:
+      - name: Check Deploy to DEVELOPMENT
+        if: ${{ matrix.location == 'DEVELOPMENT' && inputs.DEVELOPMENT}}
+        uses: ./.github/workflows/deploy_each.yml
+        with:
+           location: ${{ matrix.location }}
+        secrets: inherit # pass all secrets
       
