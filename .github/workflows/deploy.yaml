@@ -46,7 +46,6 @@ jobs:
       run: ${{ inputs.build-cmd }}
 
     - name: Deploy
-      if: ${{ matrix.location == 'DEV' && inputs.DEVELOPMENT}}
       run: | 
          echo "Deploying to ${{ github.event.inputs.environment }} / ${{ inputs.environment }}""
          mv ./dist/angular-conduit/assets/appConfigQA.json ./dist/angular-conduit/assets/appConfig.json
