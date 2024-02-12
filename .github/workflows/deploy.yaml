@@ -20,6 +20,7 @@ on:
         default: npm run build
 
 jobs:
+  job:
     runs-on: ubuntu-latest
     steps:
     - name: Configure AWS Credentials
