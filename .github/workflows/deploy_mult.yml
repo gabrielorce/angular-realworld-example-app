@@ -89,7 +89,7 @@ jobs:
       run: |
         echo "Deploying to PRODUCTION"
         ls -al 
-        mv ./dist/angular-conduit/assets/appConfigPROD.json ./dist/angular-conduit/assets/appConfig.json
+        mv ./dist/angular-conduit/assets/appConfigSTAG.json ./dist/angular-conduit/assets/appConfig.json
         aws s3 sync ./dist/angular-conduit s3://${{ secrets.AWS_S3_BUCKET }}
 
     - name: Cloudfront Invalidation
