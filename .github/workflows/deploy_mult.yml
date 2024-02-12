@@ -71,6 +71,8 @@ jobs:
       if: ${{ matrix.location == 'DEV' && inputs.DEVELOPMENT}}
       run: | 
          echo "Deploying to DEVELOPMENT"
+         mv ./dist/angular-conduit/assets/appConfigSTAG.json ./dist/angular-conduit/assets/appConfig.json
+
          aws s3 sync ./dist/angular-conduit s3://${{ secrets.AWS_S3_BUCKET }}
     - name: Check Deploy to STAGING
       if: ${{ matrix.location == 'STAG' && inputs.STAGING}}
