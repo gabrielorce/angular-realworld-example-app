@@ -1,0 +1,56 @@
+name: Deployy
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: environment
+        description: Select the environment
+
+      node-version:
+        description: Optionally pass the Node version. default value is 20.5.0
+        required: false
+        type: string
+        default: 20.5.0
+      
+      build-cmd:
+        description: Optionally pass npm build command. default value is 'npm run build'
+        required: false
+        type: string
+        default: npm run build
+
+jobs:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+        aws-s3-bucket-url:  ${{ secrets.AWS_S3_BUCKET_URL }}
+        aws-region: us-east-1
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build Library
+      run: ${{ inputs.build-cmd }}
+
+    - name: Deploy
+      if: ${{ matrix.location == 'DEV' && inputs.DEVELOPMENT}}
+      run: | 
+         echo "Deploying to ${{ github.event.inputs.environment }} / ${{ inputs.environment }}""
+         mv ./dist/angular-conduit/assets/appConfigSTAG.json ./dist/angular-conduit/assets/appConfig.json
+         aws s3 sync ./dist/angular-conduit s3://${{ secrets.AWS_S3_BUCKET }}
+
+    - name: Cloudfront Invalidation
+      if: success()
+      run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
