@@ -41,7 +41,7 @@ jobs:
           CLOUDFRONT_ID="E1GYKG6MMV1XI4"
           echo  $CLOUDFRONT_ID  ${{ vars.STAGING_CLOUDFRONT_ID }}
           echo "--------------------"
-          S3_BUCKET=`aws cloudfront get-distribution --id $CLOUDFRONT_ID | jq -r '.Distribution.DistributionConfig.Origins.Items[] | select(.Id == "default").DomainName'|cut -d "." -f1`
+          S3_BUCKET=`aws cloudfront get-distribution --id $CLOUDFRONT_ID | jq -r '.Distribution.DistributionConfig.Origins.Items[0]`
           echo $S3_BUCKET
           PROD_S3_BUCKET=`aws cloudfront get-distribution --id $CLOUDFRONT_ID`
           STAGING_S3_BUCKET=`aws cloudfront get-distribution --id ${{ vars.STAGING_CLOUDFRONT_ID }}`
