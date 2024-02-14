@@ -1,4 +1,4 @@
-name: Deployy
+name: BlueGreen
 
 on:
   workflow_dispatch:
