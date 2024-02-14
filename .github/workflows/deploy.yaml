@@ -50,7 +50,7 @@ jobs:
       run: | 
          echo "Deploying to ${{ github.event.inputs.environment }} / ${{ inputs.environment }}"
          echo "Deploying to ${{ vars.AWS_S3_BUCKET }}"
-         mv ${{ CONFIG_FILE_PATH }} ./dist/angular-conduit/assets/appConfig.json
+         mv ${{ vars.CONFIG_FILE_PATH }} ./dist/angular-conduit/assets/appConfig.json
          aws s3 sync ./dist/angular-conduit s3://${{ vars.AWS_S3_BUCKET }}
 
     - name: Cloudfront Invalidation
