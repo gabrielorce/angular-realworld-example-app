@@ -61,5 +61,5 @@ jobs:
       run: | 
           echo "SWAPPING"
           aws cloudfront get-distribution-config --id  ${{ vars.STAGING_CLOUDFRONT_ID }} | jq -r '.DistributionConfig'  > STAGING_CONFIG.txt
+          sed -i "s/$STAGING_S3_BUCKET/$PROD_S3_BUCKET/g" STAGING_CONFIG.txt
           cat STAGING_CONFIG.txt
-
