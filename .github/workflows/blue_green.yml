@@ -70,7 +70,7 @@ jobs:
           
     - name: Cloudfront Invalidation
       if: success()
-      run: aws cloudfront create-invalidation --distribution-id $STAGING_CLOUDFRONT_ID --paths "/*"
+      run: aws cloudfront create-invalidation --distribution-id ${{ vars.STAGING_CLOUDFRONT_ID }} --paths "/*"
 
 
 
