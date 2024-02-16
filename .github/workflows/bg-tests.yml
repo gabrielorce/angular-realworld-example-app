@@ -56,6 +56,10 @@ jobs:
 
 
 
-
-
-      
+  job2:
+    runs-on: ubuntu-latest
+    environment: PRODUCTION  
+    steps:
+    - name: Staging to PROD
+      run: |
+        echo "PRODUCTION!"
