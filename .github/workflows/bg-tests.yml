@@ -50,8 +50,8 @@ jobs:
       run: |
         STAGING_S3_BUCKET=`aws cloudfront get-distribution --id ${{ vars.STAGING_CLOUDFRONT_ID }} | jq -r '.Distribution.DistributionConfig.Origins.Items[0].DomainName'`
         echo "STAGING - Version 1" > index.html 
-        aws s3 cp index.html
-        aws cloudfront create-invalidation --distribution-id ${{ vars.PROD_CLOUDFRONT_ID }} --paths "/*"
+        aws s3 cp index.html s3://$STAGING_S3_BUCKET/
+        aws cloudfront create-invalidation --distribution-id ${{ vars.STAGING_CLOUDFRONT_ID }} --paths "/*"
 
 
 
