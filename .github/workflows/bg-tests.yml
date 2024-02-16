@@ -65,4 +65,5 @@ jobs:
         echo "PRODUCTION!"
         PRIMARY_ETAG=`aws cloudfront get-distribution-config --id ${{ vars.PROD_CLOUDFRONT_ID }} --query 'ETag' --output text`
         STAGING_ETAG=`aws cloudfront get-distribution-config --id ${{ vars.STAGING_CLOUDFRONT_ID }} --query 'ETag' --output text`
+        echo $PRIMARY_ETAG $STAGING_ETAG
         aws cloudfront update-distribution-with-staging-config --id ${{ vars.PROD_CLOUDFRONT_ID }} --staging-distribution-id  ${{ vars.STAGING_CLOUDFRONT_ID }} --if-match "$PRIMARY_ETAG,$STAGING_ETAG"
