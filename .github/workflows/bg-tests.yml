@@ -1,4 +1,4 @@
-name: BLue-Green Deployment
+name: bg-tests
 
 on:
   workflow_dispatch:
