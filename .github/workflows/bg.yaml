@@ -14,4 +14,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
      - name: echo
-       run: echo ${{ github.event.name }}
+       run: echo ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
