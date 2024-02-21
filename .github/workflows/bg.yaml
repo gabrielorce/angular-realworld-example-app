@@ -9,9 +9,9 @@ on:
 
 
 jobs:
-  deploy_to_staging:
+  job1:
     environment: ${{ inputs.environment }}  
     runs-on: ubuntu-latest
     steps:
      - name: echo
-       run: echo ${{ github.event.deployment.environment }}
+       run: echo ${{ github.event.name }}
