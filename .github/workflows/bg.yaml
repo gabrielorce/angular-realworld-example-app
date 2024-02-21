@@ -11,8 +11,7 @@ on:
 jobs:
   deploy_to_staging:
     environment: ${{ inputs.environment }}  
-    if: environment == 'PRODUCTION'
     runs-on: ubuntu-latest
     steps:
      - name: echo
-       run: echo "PROD!!!"
+       run: echo ${{ github.event.deployment.environment }}
