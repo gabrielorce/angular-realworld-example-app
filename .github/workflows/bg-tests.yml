@@ -67,6 +67,9 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
         aws-region: us-east-1
 
+    - name: Sleep for 5 seconds
+      run: sleep 5s
+      shell: bash
       
     - name: Promote Staging to PROD
       run: |
