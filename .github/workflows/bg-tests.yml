@@ -1,4 +1,4 @@
-oy_to_stagingname: bg-tests
+name: bg-tests
 
 on:
   workflow_dispatch:
