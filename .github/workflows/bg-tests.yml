@@ -81,11 +81,11 @@ jobs:
         STAGING_ETAG=`aws cloudfront get-distribution-config --id ${{ vars.STAGING_CLOUDFRONT_ID }} --query 'ETag' --output text`
         echo $PRIMARY_ETAG $STAGING_ETAG
         aws cloudfront update-distribution-with-staging-config --id ${{ vars.PROD_CLOUDFRONT_ID }} --staging-distribution-id  ${{ vars.STAGING_CLOUDFRONT_ID }} --if-match "$PRIMARY_ETAG,$STAGING_ETAG"
-        aws cloudfront get-distribution-config --id $STAGING_CLOUDFRONT_ID| jq -r '.DistributionConfig'  > STAGING_CONFIG.txt
+        aws cloudfront get-distribution-config --id ${{ vars.STAGING_CLOUDFRONT_ID }}| jq -r '.DistributionConfig'  > STAGING_CONFIG.txt
         sed -i "s/$STAGING_S3_BUCKET/$PROD_S3_BUCKET/g" STAGING_CONFIG.txt
-        STAGING_ETAG=`aws cloudfront get-distribution-config --id $STAGING_CLOUDFRONT_ID --query 'ETag' --output text`
-        aws cloudfront update-distribution --id $STAGING_CLOUDFRONT_ID --distribution-config "file://STAGING_CONFIG.txt" --if-match $STAGING_ETAG
-        aws cloudfront create-invalidation --distribution-id $STAGING_CLOUDFRONT_ID --paths "/*"
+        STAGING_ETAG=`aws cloudfront get-distribution-config --id ${{ vars.STAGING_CLOUDFRONT_ID }} --query 'ETag' --output text`
+        aws cloudfront update-distribution --id ${{ vars.STAGING_CLOUDFRONT_ID }} --distribution-config "file://STAGING_CONFIG.txt" --if-match $STAGING_ETAG
+        aws cloudfront create-invalidation --distribution-id ${{ vars.STAGING_CLOUDFRONT_ID }} --paths "/*"
 
     - name: Sleep for 10 seconds
       run: sleep 10s
