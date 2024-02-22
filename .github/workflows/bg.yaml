@@ -16,3 +16,11 @@ jobs:
     steps:
      - name: echo
        run: echo ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
+
+  job2:
+    environment: ${{ inputs.environment }}  
+    if: inputs.environment == 'DEVELOPMENT'
+    runs-on: ubuntu-latest
+    steps:
+     - name: echo
+       run: echo ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
