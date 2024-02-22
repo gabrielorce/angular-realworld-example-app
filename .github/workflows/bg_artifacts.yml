@@ -54,7 +54,9 @@ jobs:
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3
-
+      with:
+       name: frog
+       path: dist
 
     - name: rm dist
       run: |
@@ -64,9 +66,7 @@ jobs:
 
     - name: Download Artifact
       uses: actions/download-artifact@v2
-      with:
-       name: frog
-       path: artif
+
 
     - name: ls
       run: |
