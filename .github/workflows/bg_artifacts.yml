@@ -48,7 +48,7 @@ jobs:
     - name: Build Library
       run: |
          ls -al
-         ls -al /dist
+         ls -al dist
 
 
     - name: Upload a Build Artifact
