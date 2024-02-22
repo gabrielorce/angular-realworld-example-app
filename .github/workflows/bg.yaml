@@ -11,7 +11,7 @@ on:
 jobs:
   job1:
     environment: ${{ inputs.environment }}  
-    if: inputs.environment == 'PRODUCTION'
+    if: ${{ (inputs.environment == 'PRODUCTION') || (inputs.environment == 'QA') }}
     runs-on: ubuntu-latest
     steps:
      - name: echo
