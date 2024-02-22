@@ -46,4 +46,13 @@ jobs:
       run: ${{ inputs.build-cmd }}
 
     - name: Build Library
-      run: ls -al
+      run: |
+         ls -al
+         ls -al /dist
+
+
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v4
+      with:
+       name: frog
+       path: dist/
