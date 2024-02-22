@@ -60,16 +60,17 @@ jobs:
 
     - name: rm dist
       run: |
-         rm -r dist 
+         rm -r dist
+         mkdir artif
          ls -al
 
     - name: Download Artifact
       uses: actions/download-artifact@v2
       with:
        name: frog
-       path: angular-conduit/
+       path: artif
 
     - name: ls
       run: |
          ls -al
-         ls -al dist
+         ls -al artif
