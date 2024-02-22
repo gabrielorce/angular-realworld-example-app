@@ -1,4 +1,4 @@
-name: bg-tests
+name: bg-artifacts
 
 on:
   workflow_dispatch:
