@@ -51,8 +51,25 @@ jobs:
          ls -al dist
 
 
+
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4
       with:
        name: frog
        path: dist/
+
+    - name: rm dist
+      run: |
+         rm -r dist 
+         ls -al
+
+    - name: Download Artifact
+      uses: actions/download-artifact@v2
+      with:
+       name: frog
+       path: dist/
+
+    - name: ls
+      run: |
+         ls -al
+         ls -al dist
