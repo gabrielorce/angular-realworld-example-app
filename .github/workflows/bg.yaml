@@ -11,6 +11,7 @@ on:
 jobs:
   job1:
     environment: ${{ inputs.environment }}  
+    if: inputs.environment == 'PRODUCTION'
     runs-on: ubuntu-latest
     steps:
      - name: echo
