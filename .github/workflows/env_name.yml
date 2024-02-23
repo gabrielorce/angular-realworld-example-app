@@ -18,12 +18,11 @@ jobs:
         id: extract_substring
         run: |
           # Example string
-          string="example_substring"
+          string="QA_STAGING"
           # Extracting substring
           substring="${string%%_*}"
           echo $string
           echo $substring
-          substring="PRODUCTION"
           echo "::set-output name=environment_name::$substring"
 
   change_environment:
