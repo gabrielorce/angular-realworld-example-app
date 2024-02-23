@@ -80,6 +80,7 @@ jobs:
 
 
   promote_staging:
+    needs: deploy_to_staging
     runs-on: ubuntu-latest
     environment: ${{ needs.extract_substring.outputs.environment_name }}   
     steps:
