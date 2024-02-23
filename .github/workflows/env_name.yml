@@ -20,7 +20,7 @@ jobs:
           # Example string
           string="example_substring"
           # Extracting substring
-          substring="${string%%*_}"
+          substring="${string%%_*}"
           echo $string
           echo $substring
           substring="QA"
