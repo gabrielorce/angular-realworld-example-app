@@ -65,22 +65,26 @@ jobs:
       run: sleep 10s
       shell: bash
 
-    - name: Extract substring from string
-      id: extract_substring
-      run: |
-        echo ${{ vars.CONFIG_FILE_PATH }}
-        # Example string
-        string="PRODUCTION_STAGING"
-        # Extracting substring
-        substring="${string%%_*}"
-        substring="PRODUCTION"
-        echo $string
-        echo $substring
-        echo "::set-output name=environment_name::$substring"
-
+  extract_substring:
+    runs-on: ubuntu-latest
+    environment:  ${{ github.event.inputs.environment }}
+    outputs:
+      environment_name: ${{ steps.extract_substring.outputs.environment_name }}
+    steps:
+      - name: Extract substring from string
+        id: extract_substring
+        run: |
+          echo ${{ vars.CONFIG_FILE_PATH }}
+          # Example string
+          string="PRODUCTION_STAGING"
+          # Extracting substring
+          substring="${string%%_*}"
+          echo $string
+          echo $substring
+          echo "::set-output name=environment_name::$substring"
 
   promote_staging:
-    needs: deploy_to_staging
+    needs: extract_substring
     runs-on: ubuntu-latest
     environment: ${{ needs.extract_substring.outputs.environment_name }}   
     steps:
