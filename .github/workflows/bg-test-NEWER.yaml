@@ -1,4 +1,4 @@
-name: bg-tests NEW
+name: bg-tests NEWER
 
 on:
   workflow_dispatch:
