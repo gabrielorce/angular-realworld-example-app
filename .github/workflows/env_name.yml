@@ -1,0 +1,33 @@
+name: Change Environment Job
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  extract_substring:
+    runs-on: ubuntu-latest
+    outputs:
+      environment_name: ${{ steps.extract_substring.outputs.environment_name }}
+    steps:
+      - name: Extract substring from string
+        id: extract_substring
+        run: |
+          # Example string
+          string="example_substring"
+          # Extracting substring
+          substring="${string##*_}"
+          echo "::set-output name=environment_name::$substring"
+
+  change_environment:
+    needs: extract_substring
+    runs-on: ubuntu-latest
+    steps:
+      - name: Change environment
+        if: ${{ github.event_name == 'push' }}
+        environment: ${{ needs.extract_substring.outputs.environment_name }}
+        run: |
+          # Your job steps here based on the environment extracted
+          echo "Changed to environment: ${{ needs.extract_substring.outputs.environment_name }}"
+
