@@ -1,0 +1,104 @@
+name: bg-tests NEW
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: environment
+        description: Select the environment
+
+      node-version:
+        description: Optionally pass the Node version. default value is 20.5.0
+        required: false
+        type: string
+        default: 20.5.0
+      
+      build-cmd:
+        description: Optionally pass npm build command. default value is 'npm run build'
+        required: false
+        type: string
+        default: npm run build
+
+jobs:
+  deploy_to_staging:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}_staging
+    steps:
+
+    - name: Print Environment
+      run: echo ${{ github.event.inputs.environment }}
+
+      
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+        aws-s3-bucket-url:  ${{ secrets.AWS_S3_BUCKET_URL }}
+        aws-region: us-east-1
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build Library
+      run: ${{ inputs.build-cmd }}
+
+    - name: Deploy to Staging
+      run: |
+        echo "Deploying to Staging CloudFront distribution"
+        S3_BUCKET=$(aws cloudfront get-distribution --id ${{ vars.STAGING_CLOUDFRONT_ID }} | jq -r '.Distribution.DistributionConfig.Origins.Items[0].DomainName'|cut -d "." -f1)
+        echo $S3_BUCKET
+        echo "STAGING - Version 987" > index.html 
+        aws s3 cp index.html  s3://$S3_BUCKET/
+        aws cloudfront create-invalidation --distribution-id ${{ vars.STAGING_CLOUDFRONT_ID }} --paths "/*"
+  
+    - name: Sleep for 10 seconds
+      run: sleep 10s
+      shell: bash
+
+
+  promote_staging:
+    needs: deploy_to_staging
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+        aws-region: us-east-1
+
+    - name: Change environment
+      run: |
+        echo "Changed to environment: ${{ needs.extract_substring.outputs.environment_name }}"
+        echo ${{ vars.CONFIG_FILE_PATH }}
+
+      
+    - name: Promote Staging
+      run: |
+        echo "PROMOTING STAGING CLOUDFRONT DISTRIBUTION "
+        PROD_S3_BUCKET=$(aws cloudfront get-distribution --id ${{ vars.PROD_CLOUDFRONT_ID }} | jq -r '.Distribution.DistributionConfig.Origins.Items[0].DomainName'|cut -d "." -f1)
+        STAGING_S3_BUCKET=$(aws cloudfront get-distribution --id ${{ vars.STAGING_CLOUDFRONT_ID }} | jq -r '.Distribution.DistributionConfig.Origins.Items[0].DomainName'|cut -d "." -f1)
+        echo $PROD_S3_BUCKET $STAGING_S3_BUCKET
+        PRIMARY_ETAG=`aws cloudfront get-distribution-config --id ${{ vars.PROD_CLOUDFRONT_ID }} --query 'ETag' --output text`
+        STAGING_ETAG=`aws cloudfront get-distribution-config --id ${{ vars.STAGING_CLOUDFRONT_ID }} --query 'ETag' --output text`
+        echo $PRIMARY_ETAG $STAGING_ETAG
+        aws cloudfront update-distribution-with-staging-config --id ${{ vars.PROD_CLOUDFRONT_ID }} --staging-distribution-id  ${{ vars.STAGING_CLOUDFRONT_ID }} --if-match "$PRIMARY_ETAG,$STAGING_ETAG"
+        aws cloudfront get-distribution-config --id ${{ vars.STAGING_CLOUDFRONT_ID }}| jq -r '.DistributionConfig'  > STAGING_CONFIG.txt
+        sed -i "s/$STAGING_S3_BUCKET/$PROD_S3_BUCKET/g" STAGING_CONFIG.txt
+        STAGING_ETAG=`aws cloudfront get-distribution-config --id ${{ vars.STAGING_CLOUDFRONT_ID }} --query 'ETag' --output text`
+        aws cloudfront update-distribution --id ${{ vars.STAGING_CLOUDFRONT_ID }} --distribution-config "file://STAGING_CONFIG.txt" --if-match $STAGING_ETAG
+        aws cloudfront create-invalidation --distribution-id ${{ vars.STAGING_CLOUDFRONT_ID }} --paths "/*"
+
+    - name: Sleep for 10 seconds
+      run: sleep 10s
+      shell: bash
