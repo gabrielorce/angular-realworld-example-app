@@ -20,7 +20,7 @@ jobs:
           # Extracting substring
           substring="${string##*_}"
           echo $substring
-          substring="PRODUCTION"
+          substring="QA"
           echo "::set-output name=environment_name::$substring"
 
   change_environment:
