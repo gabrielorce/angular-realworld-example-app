@@ -22,7 +22,7 @@ on:
 jobs:
   deploy_to_staging:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}_STAGING
+    environment: ${{ inputs.environment }}
     steps:
 
     - name: Print Environment
