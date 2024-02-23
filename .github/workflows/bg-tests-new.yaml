@@ -66,6 +66,7 @@ jobs:
       shell: bash
 
   extract_substring:
+    needs: deploy_to_staging
     runs-on: ubuntu-latest
     environment:  ${{ github.event.inputs.environment }}
     outputs:
