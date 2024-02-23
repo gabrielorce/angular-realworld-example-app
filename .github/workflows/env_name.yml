@@ -8,6 +8,7 @@ on:
 jobs:
   extract_substring:
     runs-on: ubuntu-latest
+    environment: DEVELOPMENT
     outputs:
       environment_name: ${{ steps.extract_substring.outputs.environment_name }}
     steps:
@@ -18,15 +19,17 @@ jobs:
           string="example_substring"
           # Extracting substring
           substring="${string##*_}"
+          echo $substring
+          substring="PRODUCTION:
           echo "::set-output name=environment_name::$substring"
 
   change_environment:
     needs: extract_substring
     runs-on: ubuntu-latest
+    environment: ${{ needs.extract_substring.outputs.environment_name }}
     steps:
       - name: Change environment
         if: ${{ github.event_name == 'push' }}
-        environment: ${{ needs.extract_substring.outputs.environment_name }}
         run: |
           # Your job steps here based on the environment extracted
           echo "Changed to environment: ${{ needs.extract_substring.outputs.environment_name }}"
