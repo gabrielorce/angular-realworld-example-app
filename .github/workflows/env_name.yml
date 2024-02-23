@@ -17,6 +17,7 @@ jobs:
       - name: Extract substring from string
         id: extract_substring
         run: |
+          echo ${{ vars.CONFIG_FILE_PATH }}
           # Example string
           string="PRODUCTION_STAGING"
           # Extracting substring
@@ -33,5 +34,5 @@ jobs:
       - name: Change environment
         run: |
           echo "Changed to environment: ${{ needs.extract_substring.outputs.environment_name }}"
-          echo $ {{ vars.CONFIG_FILE_PATH }}
+          echo ${{ vars.CONFIG_FILE_PATH }}
 
