@@ -19,6 +19,7 @@ jobs:
           string="example_substring"
           # Extracting substring
           substring="${string##*_}"
+          echo $string
           echo $substring
           substring="QA"
           echo "::set-output name=environment_name::$substring"
@@ -33,4 +34,5 @@ jobs:
         run: |
           # Your job steps here based on the environment extracted
           echo "Changed to environment: ${{ needs.extract_substring.outputs.environment_name }}"
+          echo $ {{ var.CONFIG_FILE_PATH }}
 
