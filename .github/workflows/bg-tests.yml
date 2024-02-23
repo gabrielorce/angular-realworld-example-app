@@ -61,7 +61,7 @@ jobs:
 
   promote_staging:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}  
+    environment: PRODUCTION   
     steps:
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
