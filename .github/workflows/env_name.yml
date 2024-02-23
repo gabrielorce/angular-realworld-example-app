@@ -34,6 +34,6 @@ jobs:
       - name: Change environment
         if: ${{ github.event_name == 'push' }}
         run: |
-          echo "Changed to environment: ${{ needs.extract_substring.outputs.environment_name }}"
+          echo "Changed to environment: ${{ extract_substring.outputs.environment_name }}"
           echo $ {{ var.CONFIG_FILE_PATH }}
 
